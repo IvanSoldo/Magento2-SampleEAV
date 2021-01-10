@@ -5,6 +5,7 @@ namespace Inchoo\SampleEAV\Setup\Patch\Data;
 
 
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Model\ResourceModel\Attribute;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -19,11 +20,14 @@ class AddCustomCustomerAddressAttribute implements DataPatchInterface
 
     private $eavConfig;
 
-    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup, EavConfig $eavConfig)
+    private $attributeResource;
+
+    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup, EavConfig $eavConfig, Attribute $attributeResource)
     {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->moduleDataSetup = $moduleDataSetup;
         $this->eavConfig = $eavConfig;
+        $this->attributeResource = $attributeResource;
     }
 
     public static function getDependencies()
@@ -66,6 +70,6 @@ class AddCustomCustomerAddressAttribute implements DataPatchInterface
             'customer_address_edit',
             'customer_register_address'
         ]);
-        $attribute->getResource()->save($attribute);
+        $this->attributeResource->save($attribute);
     }
 }

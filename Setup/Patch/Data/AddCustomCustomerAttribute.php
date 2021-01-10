@@ -5,6 +5,7 @@ namespace Inchoo\SampleEAV\Setup\Patch\Data;
 
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\ResourceModel\Attribute;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -19,11 +20,14 @@ class AddCustomCustomerAttribute implements DataPatchInterface
 
     private $eavConfig;
 
-    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup, EavConfig $eavConfig)
+    private $attributeResource;
+
+    public function __construct(EavSetupFactory $eavSetupFactory, ModuleDataSetupInterface $moduleDataSetup, EavConfig $eavConfig, Attribute $attributeResource)
     {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->moduleDataSetup = $moduleDataSetup;
         $this->eavConfig = $eavConfig;
+        $this->attributeResource = $attributeResource;
     }
 
     public static function getDependencies()
@@ -72,7 +76,7 @@ class AddCustomCustomerAttribute implements DataPatchInterface
             'max_text_length' => 30,
         ]);
 
-        $attribute->getResource()->save($attribute);
+        $this->attributeResource->save($attribute);
 
     }
 }
